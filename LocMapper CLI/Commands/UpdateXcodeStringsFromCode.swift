@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 import Foundation
+import os.log
 
 import ArgumentParser
 
@@ -80,9 +81,6 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 	var skipStoryboardsAndXibs = false
 	
 	@Flag
-	var coloredOutput = false
-	
-	@Flag
 	var skipCode = false
 	
 	@Argument
@@ -133,14 +131,20 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 		fm.createFile(atPath: runLockURL.path, contents: nil, attributes: nil)
 		defer {
 			if (try? fm.removeItem(at: runLockURL)) == nil {
-				printError("Cannot remove update lock. Please manually remove file at path \(runLockURL.path)")
+#if canImport(os)
+				LocMapperConfig.oslog.flatMap{ os_log("Cannot remove update lock. Please manually remove file at path “%{public}@”.", log: $0, type: .default, runLockURL.path) }
+#endif
+				LocMapperConfig.logger?.warning("Cannot remove update lock. Please manually remove file at path “\(runLockURL.path)”.")
 			}
 		}
 		
 		/* *** Copy relevant repository files to a temporary location *** */
 		
 		let projectCloneRootURL = fm.temporaryDirectory.appendingPathComponent(projectRootURL.lastPathComponent + "_" + UUID().uuidString, isDirectory: true)
-		printInfo("Copying relevant project files to temporary location \(projectCloneRootURL)")
+#if canImport(os)
+		LocMapperConfig.oslog.flatMap{ os_log("Copying relevant project files to temporary location “%{public}@”.", log: $0, type: .info, String(describing: projectCloneRootURL)) }
+#endif
+		LocMapperConfig.logger?.info("Copying relevant project files to temporary location.", metadata: ["location": "\(projectCloneRootURL)"])
 		
 		try fm.createDirectory(at: projectCloneRootURL, withIntermediateDirectories: true, attributes: nil)
 		defer {_ = try? fm.removeItem(at: projectCloneRootURL)} /* We don’t really care if the delete fails… */
@@ -162,7 +166,10 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 		
 		/* *** Finding and treating storyboard and xib files *** */
 		if !skipStoryboardsAndXibs {
-			printInfo("Treating storyboards and xibs")
+#if canImport(os)
+			LocMapperConfig.oslog.flatMap{ os_log("Treating storyboards and xibs", log: $0, type: .info) }
+#endif
+			LocMapperConfig.logger?.info("Treating storyboards and xibs")
 			
 			guard let dirEnumeratorForStoryboardsAndXibs = FilteredDirectoryEnumerator(url: projectCloneRootURL, pathSuffixes: [".storyboard", ".xib"], fileManager: fm) else {
 				throw UpdateError(message: "Cannot enumerate files at path \(projectCloneRootURL.path)")
@@ -171,7 +178,10 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 				let parentFolderName = xibURL.deletingLastPathComponent().lastPathComponent
 				guard parentFolderName == "Base.lproj" else {
 					if !isURL(xibURL, containedInPathsList: unlocalizedXibsPaths, rootURL: projectCloneRootURL) {
-						printWarning("File “\(xibURL.relativePath)” does not seem to be localized.")
+#if canImport(os)
+						LocMapperConfig.oslog.flatMap{ os_log("File “%{public}@” does not seem to be localized.", log: $0, type: .default, xibURL.relativePath) }
+#endif
+						LocMapperConfig.logger?.warning("File does not seem to be localized.", metadata: ["relative_path": "\(xibURL.relativePath)"])
 					}
 					continue
 				}
@@ -185,7 +195,10 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 					let originalParsedStringsFile: XcodeStringsFile?
 					if fm.fileExists(atPath: tempDestinationStringsURL.path) {
 						guard let stringsFile = try? XcodeStringsFile(fromPath: tempDestinationStringsURL.relativePath, relativeToProjectPath: projectCloneRootURL.path) else {
-							printError("Cannot read strings file at path “\(tempDestinationStringsURL.relativePath)”. Skipping this file.")
+#if canImport(os)
+							LocMapperConfig.oslog.flatMap{ os_log("Cannot read strings file at path “%{public}@”. Skipping this file.", log: $0, type: .default, tempDestinationStringsURL.relativePath) }
+#endif
+							LocMapperConfig.logger?.warning("Failed parsing file; skipping it.", metadata: ["relative_path": "\(tempDestinationStringsURL.relativePath)"])
 							continue
 						}
 						originalParsedStringsFile = stringsFile
@@ -198,12 +211,18 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 					defer {_ = try? fm.removeItem(at: temporaryStringsFileURL)} /* We don’t care if the delete fails */
 					let exitCode = finishedProcess(launchPath: "/usr/bin/ibtool", arguments: ["--export-strings-file", temporaryStringsFileURL.path, xibURL.path])
 					guard exitCode == 0 else {
-						printError("ibtool failed producing strings file for “\(xibURL.relativePath)” (language was \(language)). Skipping this file.")
+#if canImport(os)
+						LocMapperConfig.oslog.flatMap{ os_log("ibtool failed producing strings file for “%{public}@” (language was %{public}@). Skipping this file.", log: $0, type: .default, xibURL.relativePath, language) }
+#endif
+						LocMapperConfig.logger?.warning("ibtool failed producing strings file from storyboard or xib. Skipping it.", metadata: ["relative_path": "\(xibURL.relativePath)", "language": "\(language)"])
 						continue
 					}
 					/* Now reading the newly produced strings file. */
 					guard let newParsedStringsFile = try? XcodeStringsFile(fromPath: temporaryStringsFileURL.path, relativeToProjectPath: "/") else {
-						printError("Cannot read strings file generated by ibtool for “\(xibURL.relativePath)” (language was \(language)). Skipping this file.")
+#if canImport(os)
+						LocMapperConfig.oslog.flatMap{ os_log("Cannot read strings file generated by ibtool for “%{public}@” (language was %{public}@). Skipping this file.", log: $0, type: .default, xibURL.relativePath, language) }
+#endif
+						LocMapperConfig.logger?.warning("Cannot read strings file generated by ibtool from storyboard or xib. Skipping it.", metadata: ["relative_path": "\(xibURL.relativePath)", "language": "\(language)"])
 						continue
 					}
 					/* Now we merge the two strings files (if we have a previous one). */
@@ -218,7 +237,10 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 		
 		/* *** Finding and treating storyboard and xib files *** */
 		if !skipCode, let localizablesPath = localizablesPath {
-			printInfo("Treating code")
+#if canImport(os)
+			LocMapperConfig.oslog.flatMap{ os_log("Treating code", log: $0, type: .info) }
+#endif
+			LocMapperConfig.logger?.info("Treating code")
 			
 			guard let dirEnumeratorForCode = FilteredDirectoryEnumerator(url: projectCloneRootURL, pathSuffixes: [".swift", ".m", ".mm", ".c", ".cpp"], fileManager: fm) else {
 				throw UpdateError(message: "Cannot enumerate files at path \(projectCloneRootURL.path)")
@@ -263,7 +285,10 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 				do {
 					genstringsStringsfiles[stringsfile.relativePath] = try XcodeStringsFile(fromPath: stringsfile.path, relativeToProjectPath: "/")
 				} catch {
-					printWarning("genstrings generated a strings file (\(stringsfile.relativePath)) whose parsing failed. Ignoring this file. Error was \(error)")
+#if canImport(os)
+					LocMapperConfig.oslog.flatMap{ os_log("genstrings generated a strings file (%{public}@) whose parsing failed. Ignoring this file. Error was %{public}@.", log: $0, type: .default, stringsfile.relativePath, String(describing: error)) }
+#endif
+					LocMapperConfig.logger?.warning("Cannot read strings file generated by genstrings from storyboard or xib. Skipping it.", metadata: ["relative_path": "\(stringsfile.relativePath)", "error": "\(error)"])
 				}
 			}
 			/* Merge the strings we got from genstrings and the ones we already had. */
@@ -271,7 +296,10 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 				let lprojURL = URL(fileURLWithPath: localizablesPath, relativeTo: projectCloneRootURL).appendingPathComponent(language + ".lproj", isDirectory: true)
 				try fm.createDirectory(at: lprojURL, withIntermediateDirectories: true, attributes: nil)
 				guard let dirEnumerator = FilteredDirectoryEnumerator(url: lprojURL, pathSuffixes: [".strings"], fileManager: fm) else {
-					printWarning("Cannot enumerate files at path \(lprojURL.relativePath); ignoring files in this folder.")
+#if canImport(os)
+					LocMapperConfig.oslog.flatMap{ os_log("Cannot enumerate files at path “%{public}”; ignoring files in this folder.", log: $0, type: .default, lprojURL.relativePath) }
+#endif
+					LocMapperConfig.logger?.warning("Cannot enumerate files in a folder; skipping it.", metadata: ["relative_path": "\(lprojURL.relativePath)"])
 					continue
 				}
 				var foundStringsfile = Set<String>()
@@ -281,7 +309,10 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 					
 					guard let newStringsfile = genstringsStringsfiles[stringsfile.relativePath] else {
 						if !isURL(stringsfileURLRelativeToProject, containedInPathsList: unusedStringsfilesPaths, rootURL: projectCloneRootURL) {
-							printWarning("File “\(stringsfileURLRelativeToProject.relativePath)” does not seem to be used in the project.")
+#if canImport(os)
+							LocMapperConfig.oslog.flatMap{ os_log("File “%{public}@” does not seem to be used in the project.", log: $0, type: .info, stringsfileURLRelativeToProject.relativePath) }
+#endif
+							LocMapperConfig.logger?.notice("File does not seem to be used in the project.", metadata: ["relative_path": "\(stringsfileURLRelativeToProject.relativePath)"])
 						}
 						continue
 					}
@@ -290,7 +321,10 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 					do {
 						parsedStringsfile = try XcodeStringsFile(fromPath: stringsfile.path, relativeToProjectPath: "/")
 					} catch {
-						printWarning("Found strings file (\(stringsfileURLRelativeToProject.relativePath)) in project which cannot be parsed. Error was \(error)")
+#if canImport(os)
+						LocMapperConfig.oslog.flatMap{ os_log("Failed parsing strings file (%{public}@) in project. Error was %{public}@.", log: $0, type: .default, stringsfileURLRelativeToProject.relativePath, String(describing: error)) }
+#endif
+						LocMapperConfig.logger?.warning("Failed parsing strings file in project. Skipping it.", metadata: ["relative_path": "\(stringsfileURLRelativeToProject.relativePath)", "error": "\(error)"])
 						continue
 					}
 					
@@ -298,7 +332,10 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 					let mergedStringsfile = XcodeStringsFile(merging: newStringsfile, in: parsedStringsfile, obsoleteKeys: &obsoleteKeys, filepath: stringsfileURLRelativeToProject.relativePath)
 					try writeXcodeStringsFile(mergedStringsfile, at: URL(fileURLWithPath: stringsfileURLRelativeToProject.relativePath, relativeTo: projectRootURL), encoding: encoding, fileManager: fm)
 					for obsoleteKey in (obsoleteKeys ?? []) {
-						printWarning("Found seemingly obsolete key “\(obsoleteKey)” in file (\(stringsfileURLRelativeToProject.relativePath)).")
+#if canImport(os)
+						LocMapperConfig.oslog.flatMap{ os_log("Found seemingly obsolete key “%{public}@” in file (%{public}@).", log: $0, type: .info, obsoleteKey, stringsfileURLRelativeToProject.relativePath) }
+#endif
+						LocMapperConfig.logger?.notice("Found seemingly obsolete key in strings file.", metadata: ["relative_path": "\(stringsfileURLRelativeToProject.relativePath)", "key": "\(obsoleteKey)"])
 					}
 				}
 				for (stringsfileName, parsedFile) in genstringsStringsfiles.filter({ !foundStringsfile.contains($0.key) }) {
@@ -364,42 +401,6 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 			return str
 		}
 		return data.reduce("", { $0 + String(format: "%02x", $1) })
-	}
-	
-	private func printError(_ str: String) {
-		if coloredOutput {
-			print("\u{001B}[1;31m", terminator: "", to: &stderrStream)
-		}
-		print("***** ERROR: " + str, terminator: "", to: &stderrStream)
-		if coloredOutput {
-			print("\u{001B}[m", to: &stderrStream)
-		} else {
-			print(to: &stderrStream)
-		}
-	}
-	
-	private func printWarning(_ str: String) {
-		if coloredOutput {
-			print("\u{001B}[0;31m", terminator: "", to: &stderrStream)
-		}
-		print("***** WARNING: " + str, terminator: "", to: &stderrStream)
-		if coloredOutput {
-			print("\u{001B}[m", to: &stderrStream)
-		} else {
-			print(to: &stderrStream)
-		}
-	}
-	
-	private func printInfo(_ str: String) {
-		if coloredOutput {
-			print("\u{001B}[0;33m", terminator: "")
-		}
-		print(str, terminator: "")
-		if coloredOutput {
-			print("\u{001B}[m")
-		} else {
-			print()
-		}
 	}
 	
 }

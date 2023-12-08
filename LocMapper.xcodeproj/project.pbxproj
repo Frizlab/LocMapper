@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -94,6 +94,7 @@
 		7BA84F2A2073A4220029D46A /* Std2Xib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA84F292073A4220029D46A /* Std2Xib.swift */; };
 		7BAAAC50219CA35D002D1861 /* LocFile+LintSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAAAC4F219CA35D002D1861 /* LocFile+LintSupport.swift */; };
 		7BAB6E04207283C100DAB11C /* TaggedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAB6E03207283C100DAB11C /* TaggedObject.swift */; };
+		7BAC45D42B22FEA900B2ABA9 /* XcodeStringsMergeAndRestoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAC45D32B22FEA900B2ABA9 /* XcodeStringsMergeAndRestoreTests.swift */; };
 		7BB90510247FF70900E3F5F5 /* CommonOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9050F247FF70900E3F5F5 /* CommonOptions.swift */; };
 		7BB9051224800C1C00E3F5F5 /* ExportToXcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9051124800C1C00E3F5F5 /* ExportToXcode.swift */; };
 		7BB90516248010C500E3F5F5 /* MergeAndroidLocs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB90515248010C500E3F5F5 /* MergeAndroidLocs.swift */; };
@@ -253,6 +254,7 @@
 		7BAAAC4F219CA35D002D1861 /* LocFile+LintSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocFile+LintSupport.swift"; sourceTree = "<group>"; };
 		7BAB6E03207283C100DAB11C /* TaggedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaggedObject.swift; sourceTree = "<group>"; };
 		7BABB9561C11C92C00DACD85 /* IOUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOUtils.swift; sourceTree = "<group>"; };
+		7BAC45D32B22FEA900B2ABA9 /* XcodeStringsMergeAndRestoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeStringsMergeAndRestoreTests.swift; sourceTree = "<group>"; };
 		7BB9050F247FF70900E3F5F5 /* CommonOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonOptions.swift; sourceTree = "<group>"; };
 		7BB9051124800C1C00E3F5F5 /* ExportToXcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportToXcode.swift; sourceTree = "<group>"; };
 		7BB90515248010C500E3F5F5 /* MergeAndroidLocs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeAndroidLocs.swift; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 			isa = PBXGroup;
 			children = (
 				7B4CC6C02025BB390055CB74 /* XcodeStringsParserTests.swift */,
+				7BAC45D32B22FEA900B2ABA9 /* XcodeStringsMergeAndRestoreTests.swift */,
 				7B6AB6D1225411BE00EA34A8 /* Supporting Files */,
 			);
 			name = LocMapperTests;
@@ -964,6 +967,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BAC45D42B22FEA900B2ABA9 /* XcodeStringsMergeAndRestoreTests.swift in Sources */,
 				7B4CC6C12025BB390055CB74 /* XcodeStringsParserTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

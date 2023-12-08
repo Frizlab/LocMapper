@@ -119,9 +119,7 @@ class XcodeStringsParserTests: XCTestCase {
 	}
 	
 	func testParseSimpleXcodeStringsFile1() {
-		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: """
-			"hello" = "Hello!";
-			""")
+		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: #""hello" = "Hello!";"#)
 		else {XCTFail("Cannot parse input"); return}
 		XCTAssertEqual(
 			parsed.components.map{ $0.stringValue },
@@ -130,9 +128,7 @@ class XcodeStringsParserTests: XCTestCase {
 	}
 	
 	func testParseSimpleXcodeStringsFile2() {
-		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: """
-			hello = "Hello!";
-			""")
+		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: #"hello = "Hello!";"#)
 		else {XCTFail("Cannot parse input"); return}
 		XCTAssertEqual(
 			parsed.components.map{ $0.stringValue },
@@ -141,9 +137,7 @@ class XcodeStringsParserTests: XCTestCase {
 	}
 	
 	func testParseSimpleXcodeStringsFile3() {
-		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: """
-			"hello"=/*comment*/"Hello!";
-			""")
+		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: #""hello"=/*comment*/"Hello!";"#)
 		else {XCTFail("Cannot parse input"); return}
 		XCTAssertEqual(
 			parsed.components.map{ $0.stringValue },
@@ -164,13 +158,11 @@ class XcodeStringsParserTests: XCTestCase {
 	}
 	
 	func testParseSimpleXcodeStringsFile5() {
-		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: """
-			"\\\"hello" = "Hello!";
-			""")
+		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: #""\"hello" = "Hello!";"#)
 		else {XCTFail("Cannot parse input"); return}
 		XCTAssertEqual(
 			parsed.components.map{ $0.stringValue },
-			[XcodeStringsFile.LocalizedString(key: "\"hello", keyHasQuotes: true, equalSign: " = ", value: "Hello!", valueHasQuotes: true, semicolon: ";")].map{ $0.stringValue }
+			[XcodeStringsFile.LocalizedString(key: #""hello"#, keyHasQuotes: true, equalSign: " = ", value: "Hello!", valueHasQuotes: true, semicolon: ";")].map{ $0.stringValue }
 		)
 	}
 	
@@ -214,9 +206,7 @@ class XcodeStringsParserTests: XCTestCase {
 	}
 	
 	func testParseWeirdXcodeStringsFile2() {
-		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: """
-			/=/;
-			""")
+		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: "/=/;")
 		else {XCTFail("Cannot parse input"); return}
 		XCTAssertEqual(
 			parsed.components.map{ $0.stringValue },
@@ -225,9 +215,7 @@ class XcodeStringsParserTests: XCTestCase {
 	}
 	
 	func testParseWeirdXcodeStringsFile3() {
-		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: """
-			/=/ /**/;
-			""")
+		guard let parsed = try? XcodeStringsFile(filepath: "whatever.strings", filecontent: "/=/ /**/;")
 		else {XCTFail("Cannot parse input"); return}
 		XCTAssertEqual(
 			parsed.components.map{ $0.stringValue },

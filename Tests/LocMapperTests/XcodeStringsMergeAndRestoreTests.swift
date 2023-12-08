@@ -75,6 +75,17 @@ final class XcodeStringsMergeAndRestoreTests : XCTestCase {
 		XCTAssertEqual(files, [filename: expectedFilecontent])
 	}
 	
+	func testFakeKeyNotValues() throws {
+		let filename = "./dummy.lproj/whatever.strings"
+		let filecontent = "this_is_normal = this_is_normal;"
+		let expectedFilecontent = "this_is_normal = this_is_normal;\n"
+		let parsed = try XcodeStringsFile(filepath: filename, filecontent: filecontent)
+		let locFile = LocFile()
+		locFile.mergeXcodeStringsFiles([parsed], folderNameToLanguageName: ["dummy.lproj": "dummy"])
+		let files = try exportXcodeAndGetFilesContent(locFile)
+		XCTAssertEqual(files, [filename: expectedFilecontent])
+	}
+	
 	private func exportXcodeAndGetFilesContent(_ locFile: LocFile) throws -> [String: String] {
 		let fm = FileManager.default
 		let outputFolder = fm.temporaryDirectory.appendingPathComponent("LocMapperTest\(UUID().uuidString))")

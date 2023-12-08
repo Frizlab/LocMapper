@@ -125,28 +125,17 @@ extension LocFile {
 				filenameToComponents[filename]! += commentComponents
 				
 				if let v = exportedValueForKey(entryKey, withLanguage: languageName) {
-					if !equalString.isEmpty {
-						filenameToComponents[filename]!.append(XcodeStringsFile.LocalizedString(
-							key: entryKey.locKey,
-							keyHasQuotes: !keyHasNoQuotes,
-							equalSign: equalString,
-							value: v,
-							valueHasQuotes: !valueHasNoQuotes,
-							semicolon: semicolonString
-						))
-					} else {
-						/* If the equal sign is empty, we’re in a weird case where the original strings file had this weird syntax where the value is ommited.
-						 * The only value possible to keep this would be to have the value equal to the key, so we set an arbitrary equal sign if it’s not. */
-						let keyEqualValue = (entryKey.locKey == v)
-						filenameToComponents[filename]!.append(XcodeStringsFile.LocalizedString(
-							key: entryKey.locKey,
-							keyHasQuotes: !keyHasNoQuotes,
-							equalSign: (keyEqualValue ? equalString/*""*/ : " = "),
-							value: (keyEqualValue ? "" : v),
-							valueHasQuotes: !valueHasNoQuotes,
-							semicolon: semicolonString
-						))
-					}
+					/* If the equal sign is empty, we’re in a weird case where the original strings file had this weird syntax where the value is ommited.
+					 * The only value possible to keep this would be to have the value equal to the key, so we set an arbitrary equal sign if it’s not. */
+					let keyEqualValue = (entryKey.locKey == v)
+					filenameToComponents[filename]!.append(XcodeStringsFile.LocalizedString(
+						key: entryKey.locKey,
+						keyHasQuotes: !keyHasNoQuotes,
+						equalSign: (!equalString.isEmpty || keyEqualValue ? equalString : " = "),
+						value: (equalString.isEmpty && keyEqualValue ? "" : v),
+						valueHasQuotes: !valueHasNoQuotes,
+						semicolon: semicolonString
+					))
 				}
 			}
 		}

@@ -2,7 +2,7 @@
  * LocFile+MigrationsSupport.swift
  * LocMapper
  *
- * Created by François Lamboley on 19/05/2018.
+ * Created by François Lamboley on 2018-05-19.
  * Copyright © 2018 happn. All rights reserved.
  */
 

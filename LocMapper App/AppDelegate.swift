@@ -2,7 +2,7 @@
  * AppDelegate.swift
  * LocMapper App
  *
- * Created by François Lamboley on 12/2/15.
+ * Created by François Lamboley on 2015-12-02.
  * Copyright © 2015 happn. All rights reserved.
  */
 

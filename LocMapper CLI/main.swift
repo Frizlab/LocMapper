@@ -2,7 +2,7 @@
  * main.swift
  * LocMapper CLI
  *
- * Created by François Lamboley on 9/25/14.
+ * Created by François Lamboley on 2014-09-25.
  * Copyright (c) 2014 happn. All rights reserved.
  */
 

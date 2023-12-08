@@ -2,7 +2,7 @@
  * PreferencesViewController.swift
  * Lokalise Project Migration
  *
- * Created by François Lamboley on 22/08/2018.
+ * Created by François Lamboley on 2018-08-22.
  * Copyright © 2018 happn. All rights reserved.
  */
 

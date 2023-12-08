@@ -2,7 +2,7 @@
  * AndroidXMLLocFile.swift
  * LocMapper
  *
- * Created by François Lamboley on 11/14/14.
+ * Created by François Lamboley on 2014-11-14.
  * Copyright (c) 2014 happn. All rights reserved.
  */
 

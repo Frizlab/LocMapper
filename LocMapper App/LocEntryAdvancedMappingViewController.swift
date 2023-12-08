@@ -2,7 +2,7 @@
  * LocEntryAdvancedMappingViewController.swift
  * LocMapper App
  *
- * Created by François Lamboley on 8/6/16.
+ * Created by François Lamboley on 2016-08-06.
  * Copyright © 2016 happn. All rights reserved.
  */
 

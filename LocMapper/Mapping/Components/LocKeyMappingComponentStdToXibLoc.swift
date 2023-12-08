@@ -2,7 +2,7 @@
  * LocKeyMappingComponentStdToXibLoc.swift
  * LocMapper
  *
- * Created by François Lamboley on 3/8/18.
+ * Created by François Lamboley on 2018-03-08.
  * Copyright © 2018 happn. All rights reserved.
  */
 

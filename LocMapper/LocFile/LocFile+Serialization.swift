@@ -2,7 +2,7 @@
  * LocFile+Serialization.swift
  * LocMapper
  *
- * Created by François Lamboley on 2/4/18.
+ * Created by François Lamboley on 2018-02-04.
  * Copyright © 2018 happn. All rights reserved.
  */
 

@@ -2,7 +2,7 @@
  * KeychainUtils.swift
  * Lokalise Project Migration
  *
- * Created by François Lamboley on 21/08/2018.
+ * Created by François Lamboley on 2018-08-21.
  * Copyright © 2018 happn. All rights reserved.
  */
 

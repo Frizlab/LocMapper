@@ -2,7 +2,7 @@
  * AppendedTagsStrings.swift
  * LocMapper
  *
- * Created by François Lamboley on 2/27/18.
+ * Created by François Lamboley on 2018-02-27.
  * Copyright © 2018 happn. All rights reserved.
  */
 

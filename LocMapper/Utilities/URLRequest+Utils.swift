@@ -2,7 +2,7 @@
  * URLRequest+Utils.swift
  * LocMapper
  *
- * Created by François Lamboley on 05/04/2018.
+ * Created by François Lamboley on 2018-04-05.
  * Copyright © 2018 happn. All rights reserved.
  */
 

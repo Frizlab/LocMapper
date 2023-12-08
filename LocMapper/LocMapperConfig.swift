@@ -2,7 +2,7 @@
  * LocMapperConfig.swift
  * LocMapper
  *
- * Created by François Lamboley on 1/22/18.
+ * Created by François Lamboley on 2018-01-22.
  * Copyright © 2018 happn. All rights reserved.
  */
 

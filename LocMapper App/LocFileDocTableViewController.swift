@@ -2,7 +2,7 @@
  * LocFileDocTableViewController.swift
  * LocMapper App
  *
- * Created by François Lamboley on 12/8/15.
+ * Created by François Lamboley on 2015-12-08.
  * Copyright © 2015 happn. All rights reserved.
  */
 

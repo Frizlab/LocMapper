@@ -2,7 +2,7 @@
  * Utils.swift
  * LocMapper App
  *
- * Created by François Lamboley on 11/3/16.
+ * Created by François Lamboley on 2016-11-03.
  * Copyright © 2016 happn. All rights reserved.
  */
 

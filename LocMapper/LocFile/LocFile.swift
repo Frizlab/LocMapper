@@ -2,7 +2,7 @@
  * LocFile.swift
  * LocMapper
  *
- * Created by François Lamboley on 9/26/14.
+ * Created by François Lamboley on 2014-09-26.
  * Copyright (c) 2014 happn. All rights reserved.
  */
 

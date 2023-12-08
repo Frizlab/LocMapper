@@ -2,7 +2,7 @@
  * PrependedUserInfoStrings.swift
  * LocMapper
  *
- * Created by François Lamboley on 10/27/16.
+ * Created by François Lamboley on 2016-10-27.
  * Copyright © 2016 happn. All rights reserved.
  */
 

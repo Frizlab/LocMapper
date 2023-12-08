@@ -2,7 +2,7 @@
  * Constants.swift
  * LocMapper App
  *
- * Created by François Lamboley on 11/6/16.
+ * Created by François Lamboley on 2016-11-06.
  * Copyright © 2016 happn. All rights reserved.
  */
 

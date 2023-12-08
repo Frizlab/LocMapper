@@ -2,7 +2,7 @@
  * IOUtils.swift
  * LocMapper
  *
- * Created by François Lamboley on 12/4/15.
+ * Created by François Lamboley on 2015-12-04.
  * Copyright © 2015 happn. All rights reserved.
  */
 

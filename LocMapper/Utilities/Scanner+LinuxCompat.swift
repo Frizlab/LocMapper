@@ -2,7 +2,7 @@
  * Scanner+LinuxCompat.swift
  * XibLoc
  *
- * Created by François Lamboley on 15/09/2018.
+ * Created by François Lamboley on 2018-09-15.
  * Copyright © 2018 happn. All rights reserved.
  */
 

@@ -2,7 +2,7 @@
  * URLSession+Synchronous.swift
  * LocMapper
  *
- * Created by François Lamboley on 2/6/17.
+ * Created by François Lamboley on 2017-02-06.
  * Copyright © 2017 happn. All rights reserved.
  */
 

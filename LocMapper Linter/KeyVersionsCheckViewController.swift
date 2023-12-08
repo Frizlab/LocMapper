@@ -2,7 +2,7 @@
  * KeyVersionsCheckViewController.swift
  * LocMapper Linter
  *
- * Created by François Lamboley on 13/12/2018.
+ * Created by François Lamboley on 2018-12-13.
  * Copyright © 2018 happn. All rights reserved.
  */
 

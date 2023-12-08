@@ -2,7 +2,7 @@
  * CSVParser.swift
  * LocMapper
  *
- * Created by François Lamboley on 12/12/14.
+ * Created by François Lamboley on 2014-12-12.
  * Copyright (c) 2014 happn. All rights reserved.
  */
 

@@ -4,7 +4,7 @@
  *
  * From https://stackoverflow.com/a/25226794
  *
- * Created by François Lamboley on 1/6/18.
+ * Created by François Lamboley on 2018-01-06.
  * Copyright © 2018 Frizlab. All rights reserved.
  */
 

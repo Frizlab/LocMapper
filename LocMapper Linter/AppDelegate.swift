@@ -2,7 +2,7 @@
  * AppDelegate.swift
  * LocMapper Linter
  *
- * Created by François Lamboley on 12/12/2018.
+ * Created by François Lamboley on 2018-12-12.
  * Copyright © 2018 happn. All rights reserved.
  */
 

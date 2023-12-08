@@ -2,7 +2,7 @@
  * LocEntryContextViewController.swift
  * LocMapper App
  *
- * Created by François Lamboley on 7/31/16.
+ * Created by François Lamboley on 2016-07-31.
  * Copyright © 2016 happn. All rights reserved.
  */
 

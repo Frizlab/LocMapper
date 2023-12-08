@@ -2,7 +2,7 @@
  * LocKeyMapping.swift
  * LocMapper
  *
- * Created by François Lamboley on 12/3/15.
+ * Created by François Lamboley on 2015-12-03.
  * Copyright © 2015 happn. All rights reserved.
  */
 

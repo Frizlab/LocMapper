@@ -181,24 +181,34 @@ public class XcodeStringsFile: TextOutputStreamable {
 		var components = [XcodeStringsComponent]()
 		var startIdx = filecontent.startIndex
 		while true {
-			guard let (preKey, fullKey) = XcodeStringsFile.parseString(source: filecontent, startIdx: &startIdx, separatorToken: "=") else {
+			guard let (preKey, fullKey) = XcodeStringsFile.parseString(source: filecontent, startIdx: &startIdx, separatorTokens: ["=", ";"]) else {
 				throw NSError(domain: "XcodeStringsFileErrDomain", code: 42, userInfo: [NSLocalizedDescriptionKey: "Cannot parse file (syntax error, cannot parse key)"])
 			}
-			guard let (key, keyHasQuotes, postKey) = fullKey else {
+			guard let (key, keyHasQuotes, postKey, separatorToken) = fullKey else {
 				components.append(contentsOf: preKey)
 				break
 			}
-			guard let (preValue, fullValue) = XcodeStringsFile.parseString(source: filecontent, startIdx: &startIdx, separatorToken: ";") else {
-				throw NSError(domain: "XcodeStringsFileErrDomain", code: 42, userInfo: [NSLocalizedDescriptionKey: "Cannot parse file (syntax error, cannot parse value)"])
+			let localizedString: LocalizedString
+			if separatorToken == "=" {
+				guard let (preValue, fullValue) = XcodeStringsFile.parseString(source: filecontent, startIdx: &startIdx, separatorTokens: [";"]) else {
+					throw NSError(domain: "XcodeStringsFileErrDomain", code: 42, userInfo: [NSLocalizedDescriptionKey: "Cannot parse file (syntax error, cannot parse value)"])
+				}
+				guard let (value, valueHasQuotes, postValue, _) = fullValue else {
+					throw NSError(domain: "XcodeStringsFileErrDomain", code: 42, userInfo: [NSLocalizedDescriptionKey: "Cannot parse file (syntax error, value not found)"])
+				}
+				localizedString = LocalizedString(
+					key: key, keyHasQuotes: keyHasQuotes,
+					equalSign: postKey.reduce("", { $0 + $1.stringValue }) + "=" + preValue.reduce("", { $0 + $1.stringValue }),
+					value: value, valueHasQuotes: valueHasQuotes,
+					semicolon: postValue.reduce("", { $0 + $1.stringValue }) + ";")
+			} else {
+				assert(separatorToken == ";")
+				localizedString = LocalizedString(
+					key: key, keyHasQuotes: keyHasQuotes,
+					equalSign: "",
+					value: "", valueHasQuotes: false,
+					semicolon: postKey.reduce("", { $0 + $1.stringValue }) + ";")
 			}
-			guard let (value, valueHasQuotes, postValue) = fullValue else {
-				throw NSError(domain: "XcodeStringsFileErrDomain", code: 42, userInfo: [NSLocalizedDescriptionKey: "Cannot parse file (syntax error, value not found)"])
-			}
-			let localizedString = LocalizedString(
-				key: key, keyHasQuotes: keyHasQuotes,
-				equalSign: postKey.reduce("", { $0 + $1.stringValue }) + "=" + preValue.reduce("", { $0 + $1.stringValue }),
-				value: value, valueHasQuotes: valueHasQuotes,
-				semicolon: postValue.reduce("", { $0 + $1.stringValue }) + ";")
 			components.append(contentsOf: preKey)
 			components.append(localizedString)
 		}
@@ -232,7 +242,8 @@ public class XcodeStringsFile: TextOutputStreamable {
 	
 }
 
-/* ******************************* State Engine *******************************
+/* ************************* State Engine (dot format) *************************
+ digraph strings_parser_state_engine {
    wait_string_start -> wait_string_start [label=" \"white\" "];
    wait_string_start -> confirm_prestring_comment_start [label=" / "];
    wait_string_start -> wait_end_string_no_double_quotes [label=" \"alphanum\" "];
@@ -275,7 +286,8 @@ public class XcodeStringsFile: TextOutputStreamable {
    confirm_end_poststring_star_comment -> wait_end_poststring_star_comment;
    wait_end_poststring_slash_comment -> wait_separator_token [label=" \\n "];
    wait_end_poststring_slash_comment -> wait_end_poststring_slash_comment;
-   ******************************* State Engine ******************************* */
+ }
+ ********************************* State Engine ******************************* */
 
 extension XcodeStringsFile {
 	
@@ -286,8 +298,8 @@ extension XcodeStringsFile {
 		case addDoubleSlashedComment
 	}
 	
-	private static func parseString(source: String, startIdx: inout String.Index, separatorToken: Character) -> (preString: [XcodeStringsComponent], (string: String, hadQuotes: Bool, postString: [XcodeStringsComponent])?)? {
-		assert(!"/*\"".contains(separatorToken))
+	private static func parseString(source: String, startIdx: inout String.Index, separatorTokens: Set<Character>) -> (preString: [XcodeStringsComponent], (string: String, hadQuotes: Bool, postString: [XcodeStringsComponent], separatorToken: Character)?)? {
+		assert(separatorTokens.allSatisfy{ !#"/"*"#.contains($0) })
 		/* Engine state */
 		var hasQuote = false
 		var currentString = ""
@@ -296,6 +308,7 @@ extension XcodeStringsFile {
 		
 		/* Results */
 		var string: String?
+		var separatorToken: Character?
 		var preString = [XcodeStringsComponent]()
 		var postString = [XcodeStringsComponent]()
 		
@@ -332,8 +345,9 @@ extension XcodeStringsFile {
 		
 		func confirm_prestring_comment_start(_ c: Character) -> Bool {
 //			Conf.oslog.flatMap{ os_log("confirm_prestring_comment_start: %@", log: $0, type: .debug, String(c)) }
-			if c == separatorToken {
+			if separatorTokens.contains(c) {
 				string = "/"
+				separatorToken = c
 				currentString = ""
 				eofHandling = .nop
 				engine = nil
@@ -414,8 +428,9 @@ extension XcodeStringsFile {
 				currentString.append(c)
 				return true
 			}
-			if c == separatorToken {
+			if separatorTokens.contains(c) {
 				string = currentString
+				separatorToken = c
 				currentString = ""
 				eofHandling = .nop
 				engine = nil
@@ -433,13 +448,13 @@ extension XcodeStringsFile {
 		
 		func wait_end_string(_ c: Character) -> Bool {
 //			Conf.oslog.flatMap{ os_log("wait_end_string: %@", log: $0, type: .debug, String(c)) }
-			if c == "\\" {
+			if c == #"\"# {
 				currentString.append(c)
 				eofHandling = .earlyEOF
 				engine = treat_string_escaped_char
 				return true
 			}
-			if c == "\"" {
+			if c == #"""# {
 				string = currentString
 				currentString = ""
 				eofHandling = .earlyEOF
@@ -460,9 +475,10 @@ extension XcodeStringsFile {
 		
 		func wait_separator_token(_ c: Character) -> Bool {
 //			Conf.oslog.flatMap{ os_log("wait_separator_token: %@", log: $0, type: .debug, String(c)) }
-			if c == separatorToken {
+			if separatorTokens.contains(c) {
 				if !currentString.isEmpty {postString.append(WhiteSpace(currentString))}
 				currentString = ""
+				separatorToken = c
 				eofHandling = .nop
 				engine = nil
 				return true
@@ -558,11 +574,11 @@ extension XcodeStringsFile {
 		}
 		
 		if let string = string {
-			let quote = hasQuote ? "\"" : ""
+			let quote = hasQuote ? #"""# : ""
 			guard let parsedString = (try? PropertyListSerialization.propertyList(from: Data((quote + string + quote).utf8), options: [], format: nil)) as? String else {
 				return nil
 			}
-			return (preString: preString, (string: parsedString, hadQuotes: hasQuote, postString: postString))
+			return (preString: preString, (string: parsedString, hadQuotes: hasQuote, postString: postString, separatorToken!/* It is a logic error if the separator token is nil. */))
 		} else {
 			return (preString: preString, nil)
 		}

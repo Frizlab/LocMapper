@@ -80,17 +80,17 @@ extension LocFile {
 	
 	public func exportToXcodeProjectWithRoot(_ rootPath: String, folderNameToLanguageName: [String: String], encoding: String.Encoding = .utf16) {
 		var filenameToComponents = [String: [XcodeStringsComponent]]()
-		for entry_key in entries.keys.sorted() {
-			guard entry_key.env == "Xcode" else {continue}
+		for entryKey in entries.keys.sorted() {
+			guard entryKey.env == "Xcode" else {continue}
 			
-			let keyHasNoQuotes   = (entry_key.userInfo["k'¿"] == "1" || entry_key.userInfo["'?"] == "0")
-			let equalString      = (entry_key.userInfo["="] ?? " = ")
-			let valueHasNoQuotes = (entry_key.userInfo["v'¿"] == "1")
-			let semicolonString  = (entry_key.userInfo[";"] ?? ";")
+			let keyHasNoQuotes   = (entryKey.userInfo["k'¿"] == "1" || entryKey.userInfo["'?"] == "0")
+			let equalString      = (entryKey.userInfo["="] ?? " = ")
+			let valueHasNoQuotes = (entryKey.userInfo["v'¿"] == "1")
+			let semicolonString  = (entryKey.userInfo[";"] ?? ";")
 			
 			/* Now let's parse the comment to separate the WhiteSpace and the Comment components. */
 			var commentComponents = [XcodeStringsComponent]()
-			let commentScanner = Scanner(string: entry_key.comment)
+			let commentScanner = Scanner(string: entryKey.comment)
 			commentScanner.charactersToBeSkipped = CharacterSet() /* No characters should be skipped. */
 			while !commentScanner.isAtEnd {
 				if let white = commentScanner.lm_scanCharacters(from: CharacterSet.whitespacesAndNewlines) {
@@ -117,16 +117,16 @@ extension LocFile {
 			}
 			
 			for (folderName, languageName) in folderNameToLanguageName {
-				let filename = entry_key.filename.replacingOccurrences(of: "//LANGUAGE//", with: "/"+folderName+"/")
+				let filename = entryKey.filename.replacingOccurrences(of: "//LANGUAGE//", with: "/"+folderName+"/")
 				if filenameToComponents[filename] == nil {
 					filenameToComponents[filename] = [XcodeStringsComponent]()
 				}
 				
 				filenameToComponents[filename]! += commentComponents
 				
-				if let v = exportedValueForKey(entry_key, withLanguage: languageName) {
+				if let v = exportedValueForKey(entryKey, withLanguage: languageName) {
 					filenameToComponents[filename]!.append(XcodeStringsFile.LocalizedString(
-						key: entry_key.locKey,
+						key: entryKey.locKey,
 						keyHasQuotes: !keyHasNoQuotes,
 						equalSign: equalString,
 						value: v,

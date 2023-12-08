@@ -14,7 +14,7 @@ import XCTest
 final class XcodeStringsMergeAndRestoreTests : XCTestCase {
 	
 	func testStandardCase() throws {
-		let filename = "whatever.strings"
+		let filename = "./whatever.strings"
 		let filecontent = """
 			"hello"/*yeay*//*super happy*/=//oneline comment
 			"Hello!";
@@ -32,9 +32,9 @@ final class XcodeStringsMergeAndRestoreTests : XCTestCase {
 	}
 	
 	func testKeyButNotValues() throws {
-		let filename = "whatever.strings"
+		let filename = "./whatever.strings"
 		let filecontent = "this_is_weird_but_valid;"
-		let expectedFilecontent = #"this_is_weird_but_valid = "!¡!TODOLOC!¡!";"#
+		let expectedFilecontent = #"this_is_weird_but_valid = "!¡!TODOLOC!¡!";\#n"#
 		let parsed = try XcodeStringsFile(filepath: filename, filecontent: filecontent)
 		let locFile = LocFile()
 		locFile.mergeXcodeStringsFiles([parsed], folderNameToLanguageName: [:])
@@ -43,19 +43,36 @@ final class XcodeStringsMergeAndRestoreTests : XCTestCase {
 	}
 	
 	func testKeyButNotValues2() throws {
-		let parsed = try XcodeStringsFile(filepath: "whatever.strings", filecontent: "this_is_weird_but_valid  ;")
-		XCTAssertEqual(
-			parsed.components.map{ $0.stringValue },
-			[XcodeStringsFile.LocalizedString(key: "this_is_weird_but_valid", keyHasQuotes: false, equalSign: "", value: "", valueHasQuotes: false, semicolon: "  ;")].map{ $0.stringValue }
-		)
+		let filename = "./whatever.strings"
+		let filecontent = "this_is_weird_but_valid  ;"
+		let expectedFilecontent = #"this_is_weird_but_valid = "!¡!TODOLOC!¡!"  ;\#n"#
+		let parsed = try XcodeStringsFile(filepath: filename, filecontent: filecontent)
+		let locFile = LocFile()
+		locFile.mergeXcodeStringsFiles([parsed], folderNameToLanguageName: [:])
+		let files = try exportXcodeAndGetFilesContent(locFile)
+		XCTAssertEqual(files, [filename: expectedFilecontent])
 	}
 	
 	func testKeyButNotValues3() throws {
-		let parsed = try XcodeStringsFile(filepath: "whatever.strings", filecontent: "\"this_is_weird_but_valid\"  ;")
-		XCTAssertEqual(
-			parsed.components.map{ $0.stringValue },
-			[XcodeStringsFile.LocalizedString(key: "this_is_weird_but_valid", keyHasQuotes: true, equalSign: "", value: "", valueHasQuotes: false, semicolon: "  ;")].map{ $0.stringValue }
-		)
+		let filename = "./whatever.strings"
+		let filecontent = #""this_is_weird_but_valid"  ;"#
+		let expectedFilecontent = #""this_is_weird_but_valid" = "!¡!TODOLOC!¡!"  ;\#n"#
+		let parsed = try XcodeStringsFile(filepath: filename, filecontent: filecontent)
+		let locFile = LocFile()
+		locFile.mergeXcodeStringsFiles([parsed], folderNameToLanguageName: [:])
+		let files = try exportXcodeAndGetFilesContent(locFile)
+		XCTAssertEqual(files, [filename: expectedFilecontent])
+	}
+	
+	func testKeyButNotValues4() throws {
+		let filename = "./dummy.lproj/whatever.strings"
+		let filecontent = "this_is_weird_but_valid  ;"
+		let expectedFilecontent = "this_is_weird_but_valid  ;\n"
+		let parsed = try XcodeStringsFile(filepath: filename, filecontent: filecontent)
+		let locFile = LocFile()
+		locFile.mergeXcodeStringsFiles([parsed], folderNameToLanguageName: ["dummy.lproj": "dummy"])
+		let files = try exportXcodeAndGetFilesContent(locFile)
+		XCTAssertEqual(files, [filename: expectedFilecontent])
 	}
 	
 	private func exportXcodeAndGetFilesContent(_ locFile: LocFile) throws -> [String: String] {
@@ -71,10 +88,15 @@ final class XcodeStringsMergeAndRestoreTests : XCTestCase {
 				NSLog("%@", "Failed to remove temporary folder: \(outputFolder.path)")
 			}
 		}
-		locFile.exportToXcodeProjectWithRoot(outputFolder.path, folderNameToLanguageName: ["dummy": "dummy"])
+		try fm.createDirectory(at: outputFolder.appendingPathComponent("dummy.lproj"), withIntermediateDirectories: true)
+		locFile.exportToXcodeProjectWithRoot(outputFolder.path, folderNameToLanguageName: ["dummy.lproj": "dummy"])
 		var res = [String: String]()
 		for file in try fm.subpathsOfDirectory(atPath: outputFolder.path) {
-			res[file] = try String(contentsOf: outputFolder.appendingPathComponent(file))
+			let url = outputFolder.appendingPathComponent(file)
+			
+			var isDir = ObjCBool(false)
+			guard fm.fileExists(atPath: url.path, isDirectory: &isDir), !isDir.boolValue else {continue}
+			res["./" + file] = try String(contentsOf: url)
 		}
 		return res
 	}

@@ -65,13 +65,17 @@ public class XcodeStringsFile: TextOutputStreamable {
 		}
 	}
 	
-	class LocalizedString: XcodeStringsComponent {
+	class LocalizedString : XcodeStringsComponent {
 		let key: String
 		let equal: String
 		let value: String
 		let semicolon: String
 		let keyHasQuotes: Bool
 		let valueHasQuotes: Bool
+		
+		var effectiveValue: String {
+			return !equal.isEmpty ? value : key
+		}
 		
 		var stringValue: String {
 			return quotedString(key, forceQuotes: keyHasQuotes) + equal + quotedString(value, forceQuotes: valueHasQuotes) + semicolon
@@ -84,7 +88,7 @@ public class XcodeStringsFile: TextOutputStreamable {
 		private func quotedString(_ string: String, forceQuotes: Bool) -> String {
 			let useQuotes = forceQuotes || stringNeedsQuotes(string)
 			let quotes = (useQuotes ? "\"" : "")
-			/* Note: Replacing new lines is not strictly speaking required... */
+			/* Note: Replacing new lines is not strictly speaking required… */
 			return quotes + (!useQuotes ? string : string.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\n", with: "\\n").replacingOccurrences(of: "\"", with: "\\\"")) + quotes
 		}
 		

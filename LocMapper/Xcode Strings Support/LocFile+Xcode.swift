@@ -55,7 +55,7 @@ extension LocFile {
 							userReadableGroupComment: currentUserReadableGroupComment, userReadableComment: currentUserReadableComment
 						)
 						let key = getKeyFrom(refKey, useNonEmptyCommentIfOneEmptyTheOtherNot: false, withListOfKeys: &keys)
-						if setValue(locString.value, forKey: key, withLanguage: languageName) {index += 1}
+						if setValue(locString.effectiveValue, forKey: key, withLanguage: languageName) {index += 1}
 						currentComment = ""
 						currentUserReadableComment = ""
 						currentUserReadableGroupComment = ""
@@ -125,14 +125,28 @@ extension LocFile {
 				filenameToComponents[filename]! += commentComponents
 				
 				if let v = exportedValueForKey(entryKey, withLanguage: languageName) {
-					filenameToComponents[filename]!.append(XcodeStringsFile.LocalizedString(
-						key: entryKey.locKey,
-						keyHasQuotes: !keyHasNoQuotes,
-						equalSign: equalString,
-						value: v,
-						valueHasQuotes: !valueHasNoQuotes,
-						semicolon: semicolonString
-					))
+					if !equalString.isEmpty {
+						filenameToComponents[filename]!.append(XcodeStringsFile.LocalizedString(
+							key: entryKey.locKey,
+							keyHasQuotes: !keyHasNoQuotes,
+							equalSign: equalString,
+							value: v,
+							valueHasQuotes: !valueHasNoQuotes,
+							semicolon: semicolonString
+						))
+					} else {
+						/* If the equal sign is empty, we’re in a weird case where the original strings file had this weird syntax where the value is ommited.
+						 * The only value possible to keep this would be to have the value equal to the key, so we set an arbitrary equal sign if it’s not. */
+						let keyEqualValue = (entryKey.locKey == v)
+						filenameToComponents[filename]!.append(XcodeStringsFile.LocalizedString(
+							key: entryKey.locKey,
+							keyHasQuotes: !keyHasNoQuotes,
+							equalSign: (keyEqualValue ? equalString/*""*/ : " = "),
+							value: (keyEqualValue ? "" : v),
+							valueHasQuotes: !valueHasNoQuotes,
+							semicolon: semicolonString
+						))
+					}
 				}
 			}
 		}

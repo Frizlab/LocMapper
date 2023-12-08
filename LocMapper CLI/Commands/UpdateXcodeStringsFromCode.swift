@@ -179,9 +179,9 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 				guard parentFolderName == "Base.lproj" else {
 					if !isURL(xibURL, containedInPathsList: unlocalizedXibsPaths, rootURL: projectCloneRootURL) {
 #if canImport(os)
-						LocMapperConfig.oslog.flatMap{ os_log("File “%{public}@” does not seem to be localized.", log: $0, type: .default, xibURL.relativePath) }
+						LocMapperConfig.oslog.flatMap{ os_log("File “%{public}@” does not seem to be localized.", log: $0, type: .info, xibURL.relativePath) }
 #endif
-						LocMapperConfig.logger?.warning("File does not seem to be localized.", metadata: ["relative_path": "\(xibURL.relativePath)"])
+						LocMapperConfig.logger?.notice("File does not seem to be localized.", metadata: ["relative_path": "\(xibURL.relativePath)"])
 					}
 					continue
 				}

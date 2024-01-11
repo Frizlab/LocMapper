@@ -142,9 +142,9 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 		
 		let projectCloneRootURL = fm.temporaryDirectory.appendingPathComponent(projectRootURL.lastPathComponent + "_" + UUID().uuidString, isDirectory: true)
 #if canImport(os)
-		LocMapperConfig.oslog.flatMap{ os_log("Copying relevant project files to temporary location “%{public}@”.", log: $0, type: .info, String(describing: projectCloneRootURL)) }
+		LocMapperConfig.oslog.flatMap{ os_log("Copying relevant project files to temporary location “%{public}@”…", log: $0, type: .info, String(describing: projectCloneRootURL)) }
 #endif
-		LocMapperConfig.logger?.info("Copying relevant project files to temporary location.", metadata: ["location": "\(projectCloneRootURL)"])
+		LocMapperConfig.logger?.info("Copying relevant project files to temporary location…", metadata: ["location": "\(projectCloneRootURL)"])
 		
 		try fm.createDirectory(at: projectCloneRootURL, withIntermediateDirectories: true, attributes: nil)
 		defer {_ = try? fm.removeItem(at: projectCloneRootURL)} /* We don’t really care if the delete fails… */
@@ -167,9 +167,9 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 		/* *** Finding and treating storyboard and xib files. *** */
 		if !skipStoryboardsAndXibs {
 #if canImport(os)
-			LocMapperConfig.oslog.flatMap{ os_log("Treating storyboards and xibs", log: $0, type: .info) }
+			LocMapperConfig.oslog.flatMap{ os_log("Treating storyboards and xibs…", log: $0, type: .info) }
 #endif
-			LocMapperConfig.logger?.info("Treating storyboards and xibs")
+			LocMapperConfig.logger?.info("Treating storyboards and xibs…")
 			
 			guard let dirEnumeratorForStoryboardsAndXibs = FilteredDirectoryEnumerator(url: projectCloneRootURL, pathSuffixes: [".storyboard", ".xib"], fileManager: fm) else {
 				throw UpdateError(message: "Cannot enumerate files at path \(projectCloneRootURL.path)")
@@ -248,9 +248,9 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 		/* *** Treating code. *** */
 		if !skipCode, let localizablesPath = localizablesPath {
 #if canImport(os)
-			LocMapperConfig.oslog.flatMap{ os_log("Treating code", log: $0, type: .info) }
+			LocMapperConfig.oslog.flatMap{ os_log("Treating code…", log: $0, type: .info) }
 #endif
-			LocMapperConfig.logger?.info("Treating code")
+			LocMapperConfig.logger?.info("Treating code…")
 			
 			guard let dirEnumeratorForCode = FilteredDirectoryEnumerator(url: projectCloneRootURL, pathSuffixes: [".swift", ".m", ".mm", ".c", ".cpp"], fileManager: fm) else {
 				throw UpdateError(message: "Cannot enumerate files at path \(projectCloneRootURL.path)")

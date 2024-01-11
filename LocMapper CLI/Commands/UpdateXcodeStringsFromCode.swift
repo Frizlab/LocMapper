@@ -164,7 +164,7 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 			try fm.copyItem(at: sourceURL, to: destinationURL)
 		}
 		
-		/* *** Finding and treating storyboard and xib files *** */
+		/* *** Finding and treating storyboard and xib files. *** */
 		if !skipStoryboardsAndXibs {
 #if canImport(os)
 			LocMapperConfig.oslog.flatMap{ os_log("Treating storyboards and xibs", log: $0, type: .info) }
@@ -174,7 +174,9 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 			guard let dirEnumeratorForStoryboardsAndXibs = FilteredDirectoryEnumerator(url: projectCloneRootURL, pathSuffixes: [".storyboard", ".xib"], fileManager: fm) else {
 				throw UpdateError(message: "Cannot enumerate files at path \(projectCloneRootURL.path)")
 			}
+			var allStoryboardsAndXibs = [URL]()
 			for xibURL in dirEnumeratorForStoryboardsAndXibs {
+				allStoryboardsAndXibs.append(xibURL)
 				let parentFolderName = xibURL.deletingLastPathComponent().lastPathComponent
 				guard parentFolderName == "Base.lproj" else {
 					if !isURL(xibURL, containedInPathsList: unlocalizedXibsPaths, rootURL: projectCloneRootURL) {
@@ -233,9 +235,14 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 					try writeXcodeStringsFile(mergedStringsFile, at: destinationStringsURL, encoding: encoding, fileManager: fm)
 				}
 			}
+			for unlocalizedXibsPath in unlocalizedXibsPaths {
+				if !allStoryboardsAndXibs.contains(URL(fileURLWithPath: unlocalizedXibsPath, relativeTo: projectCloneRootURL)) {
+					printWarning("Storyboard or xib “\(unlocalizedXibsPath)” that is marked as unlocalized does not exist.")
+				}
+			}
 		}
 		
-		/* *** Finding and treating storyboard and xib files *** */
+		/* *** Treating code. *** */
 		if !skipCode, let localizablesPath = localizablesPath {
 #if canImport(os)
 			LocMapperConfig.oslog.flatMap{ os_log("Treating code", log: $0, type: .info) }

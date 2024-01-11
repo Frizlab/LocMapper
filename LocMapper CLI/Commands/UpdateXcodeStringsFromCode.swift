@@ -381,7 +381,7 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 		var res = [String]()
 		let content = try String(contentsOf: url)
 		content.enumerateLines{ line, stop in
-			guard !line.hasPrefix("#") else {return}
+			guard !line.hasPrefix("#"), !line.isEmpty else {return}
 			res.append(line)
 		}
 		return res

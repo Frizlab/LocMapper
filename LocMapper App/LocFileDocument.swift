@@ -312,7 +312,7 @@ class LocFileDocument: NSDocument, NSTokenFieldDelegate {
 	   MARK: - Private
 	   *************** */
 	
-	private let xattrMetadataName = "fr.ftw-and-co.LocMapperApp.LocFile.doc-metadata"
+	private let xattrMetadataName = "com.xcode-actions.LocMapperApp.LocFile.doc-metadata"
 	private var uiStateToRestore: [String: Any]?
 	private var windowFrameToRestore: String?
 	private var unserializedMetadata: Any?

@@ -36,10 +36,10 @@ struct MergeXcodeLocs : ParsableCommand {
 	@OptionGroup var logOptions: LoggingOptions
 	
 	@Option(help: "List of paths to exclude when reading the project.")
-	var excludeList: [String]
+	var excludeList: [String] = []
 	
 	@Option(help: "List of paths to only include when reading the project.")
-	var includeList: [String]
+	var includeList: [String] = []
 	
 	@Argument
 	var rootFolder: String

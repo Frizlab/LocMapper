@@ -21,6 +21,7 @@ class LocEntryContextViewController: NSViewController {
 		super.viewDidLoad()
 		
 		updateLabelGeneralInfoForEmptySelection()
+		textViewContext.textColor = .textColor /* Not sure why the value from the xib seems to be changed at some point… */
 		textViewContext.string = ""
 	}
 	

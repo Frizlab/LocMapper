@@ -28,16 +28,16 @@ struct ConvertStdreflocToXibrefloc : ParsableCommand {
 		abstract: "Does the inverse of convert_xibrefloc_to_stdrefloc."
 	)
 	
-	@OptionGroup() var csvOptions: CSVOptions
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var csvOptions: CSVOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
-	@Argument()
+	@Argument
 	var inputFile: String
 	
-	@Argument()
+	@Argument
 	var outputFile: String
 	
-	@Argument()
+	@Argument
 	var languagesNames: [String]
 	
 	func run() throws {

@@ -28,8 +28,8 @@ struct MergeAndroidLocs : ParsableCommand {
 		abstract: "Merge the strings from an android project in a locmapper file."
 	)
 	
-	@OptionGroup() var csvOptions: CSVOptions
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var csvOptions: CSVOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
 	@Option
 	var resFolder = [String]()

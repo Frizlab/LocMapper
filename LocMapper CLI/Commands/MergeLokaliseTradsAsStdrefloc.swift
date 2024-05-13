@@ -28,8 +28,8 @@ struct MergeLokaliseTradsAsStdrefloc : ParsableCommand {
 		abstract: "Fetch ref loc from lokalise and merge them in an lcm file, converted into the StdRefLoc format."
 	)
 	
-	@OptionGroup() var csvOptions: CSVOptions
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var csvOptions: CSVOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
 	@Option
 	var mergeStyle = LocFile.MergeStyle.add

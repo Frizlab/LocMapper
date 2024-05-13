@@ -32,8 +32,8 @@ struct MergeXcodeLocs : ParsableCommand {
 			"""
 	)
 	
-	@OptionGroup() var csvOptions: CSVOptions
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var csvOptions: CSVOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
 	@Option(help: "List of paths to exclude when reading the project.")
 	var excludeList: [String]
@@ -41,13 +41,13 @@ struct MergeXcodeLocs : ParsableCommand {
 	@Option(help: "List of paths to only include when reading the project.")
 	var includeList: [String]
 	
-	@Argument()
+	@Argument
 	var rootFolder: String
 	
-	@Argument()
+	@Argument
 	var outputFile: String
 	
-	@Argument()
+	@Argument
 	var lprojNameToLanguageNameMapping: [String]
 	
 	func run() throws {

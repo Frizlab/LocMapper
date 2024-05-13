@@ -31,8 +31,8 @@ struct ExportToXcode : ParsableCommand {
 			"""
 	)
 	
-	@OptionGroup() var csvOptions: CSVOptions
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var csvOptions: CSVOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
 	@Option
 	var encoding = "utf16"

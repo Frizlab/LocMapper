@@ -23,8 +23,8 @@ import LocMapper
 
 struct Lint : ParsableCommand {
 	
-	@OptionGroup() var csvOptions: CSVOptions
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var csvOptions: CSVOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
 	@Flag
 	var detectUnusedRefloc = false

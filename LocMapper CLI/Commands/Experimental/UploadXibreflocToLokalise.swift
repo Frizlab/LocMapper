@@ -32,19 +32,19 @@ struct UploadXibreflocToLokalise : ParsableCommand {
 			"""
 	)
 	
-	@OptionGroup() var csvOptions: CSVOptions
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var csvOptions: CSVOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
-	@Argument()
+	@Argument
 	var lokalizeReadAndWriteToken: String
 	
-	@Argument()
+	@Argument
 	var lokalizeProjectID: String
 	
-	@Argument()
+	@Argument
 	var inputFile: String
 	
-	@Argument()
+	@Argument
 	var refLocToLokalizeLanguageNameMapping: [String]
 	
 	func run() throws {

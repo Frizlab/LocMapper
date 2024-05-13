@@ -28,16 +28,16 @@ struct ConvertXibreflocToStdrefloc : ParsableCommand {
 		abstract: "Take a XibLoc-styled RefLoc (with tokens for plurals, gender, etc.) and convert it to a more usual format (one key per plural/gender/etc. variations)."
 	)
 	
-	@OptionGroup() var csvOptions: CSVOptions
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var csvOptions: CSVOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
-	@Argument()
+	@Argument
 	var inputFile: String
 	
-	@Argument()
+	@Argument
 	var outputFile: String
 	
-	@Argument()
+	@Argument
 	var languagesNames: [String]
 	
 	func run() throws {

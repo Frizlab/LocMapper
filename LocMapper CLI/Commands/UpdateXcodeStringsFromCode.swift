@@ -48,7 +48,7 @@ struct UpdateXcodeStringsFromCode : ParsableCommand {
 			"""
 	)
 	
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
 	@Option(help: "The paths in which the lproj files are contained (for the source localizations; storyboards/xibs are localized wherever). Required if the code is not skipped.")
 	var localizablesPath: String?

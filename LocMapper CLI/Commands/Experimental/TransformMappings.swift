@@ -25,13 +25,13 @@ struct TransformMappings : ParsableCommand {
 	
 	static var configuration = CommandConfiguration(commandName: "transform_mappings")
 	
-	@OptionGroup() var csvOptions: CSVOptions
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var csvOptions: CSVOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
-	@Option()
+	@Option
 	var keysMappingFile: String?
 	
-	@Argument()
+	@Argument
 	var transformedFilePath: String
 	
 	func run() throws {

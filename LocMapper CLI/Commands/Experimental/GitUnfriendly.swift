@@ -25,10 +25,10 @@ struct GitUnfriendly : ParsableCommand {
 	
 	static var configuration = CommandConfiguration(commandName: "git_unfriendly")
 	
-	@OptionGroup() var csvOptions: CSVOptions
-	@OptionGroup() var logOptions: LoggingOptions
+	@OptionGroup var csvOptions: CSVOptions
+	@OptionGroup var logOptions: LoggingOptions
 	
-	@Argument()
+	@Argument
 	var filePath: String
 	
 	func run() throws {

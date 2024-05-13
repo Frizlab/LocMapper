@@ -6,8 +6,17 @@
         "repositoryURL": "https://github.com/xcode-actions/CLTLogger.git",
         "state": {
           "branch": null,
-          "revision": "81cbe59c5f3b0c161fd031489012ae1450412454",
-          "version": "0.7.2"
+          "revision": "d2d2be799fde3e564f6f2c35b708403bf609a0fb",
+          "version": "0.9.0"
+        }
+      },
+      {
+        "package": "SafeGlobal",
+        "repositoryURL": "https://github.com/Frizlab/SafeGlobal.git",
+        "state": {
+          "branch": null,
+          "revision": "aed1d6c7db070320e0d8e332c29bddfabb26e414",
+          "version": "0.3.0"
         }
       },
       {
@@ -24,17 +33,26 @@
         "repositoryURL": "https://github.com/apple/swift-log.git",
         "state": {
           "branch": null,
-          "revision": "532d8b529501fb73a2455b179e0bbb6d49b652ed",
-          "version": "1.5.3"
+          "revision": "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
+          "version": "1.5.4"
+        }
+      },
+      {
+        "package": "swift-syntax",
+        "repositoryURL": "https://github.com/apple/swift-syntax.git",
+        "state": {
+          "branch": null,
+          "revision": "303e5c5c36d6a558407d364878df131c3546fad8",
+          "version": "510.0.2"
         }
       },
       {
         "package": "XibLoc",
-        "repositoryURL": "https://github.com/happn-app/XibLoc.git",
+        "repositoryURL": "https://github.com/Frizlab/XibLoc.git",
         "state": {
           "branch": null,
-          "revision": "575dfaef781b378e84be0144bae4a4ccb9f45a5e",
-          "version": "1.3.0"
+          "revision": "dd9372c902d04e4559b469da9bdaf0de3ae21fb5",
+          "version": "1.3.1"
         }
       }
     ]

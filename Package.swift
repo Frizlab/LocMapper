@@ -13,10 +13,10 @@ let package = Package(
 		.executable(name: "locmapper", targets: ["locmapper"])
 	],
 	dependencies: [
-		.package(url: "https://github.com/apple/swift-log.git", from: "1.2.0"),
+		.package(url: "https://github.com/apple/swift-log.git",             from: "1.2.0"),
 		.package(url: "https://github.com/apple/swift-argument-parser.git", from: "0.3.0"),
-		.package(url: "https://github.com/happn-app/XibLoc.git", from: "1.0.0"),
-		.package(url: "https://github.com/xcode-actions/CLTLogger.git", from: "0.5.1")
+		.package(url: "https://github.com/Frizlab/XibLoc.git",              from: "1.0.0"),
+		.package(url: "https://github.com/xcode-actions/CLTLogger.git",     from: "0.5.1")
 	],
 	targets: [
 		.systemLibrary(name: "CZlib", path: "CZlib", providers: [.apt(["zlib1g-dev"])]),

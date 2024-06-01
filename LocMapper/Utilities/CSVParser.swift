@@ -220,9 +220,9 @@ class CSVParser {
 		/* newlines will contains all new lines from scanLocation.
 		 * We only want one new line. */
 		let newlines = matchedNewlines
-		if newlines.hasPrefix("\r\n") {scanner.lm_scanLocation = scanLocation.offset(by: 2, in: scanner.string); return "\r\n"}
-		if newlines.hasPrefix("\n")   {scanner.lm_scanLocation = scanLocation.offset(by: 1, in: scanner.string); return "\n"}
-		if newlines.hasPrefix("\r")   {scanner.lm_scanLocation = scanLocation.offset(by: 1, in: scanner.string); return "\r"}
+		if newlines.hasPrefix("\r\n") {scanner.lm_scanLocation = scanLocation.offset(by: 1, 2, in: scanner.string); return "\r\n"}
+		if newlines.hasPrefix("\n")   {scanner.lm_scanLocation = scanLocation.offset(by: 1,    in: scanner.string); return "\n"}
+		if newlines.hasPrefix("\r")   {scanner.lm_scanLocation = scanLocation.offset(by: 1,    in: scanner.string); return "\r"}
 #if canImport(os)
 		Conf.oslog.flatMap{ os_log("Unknown new line! oO (%@)", log: $0, type: .error, newlines) }
 #endif

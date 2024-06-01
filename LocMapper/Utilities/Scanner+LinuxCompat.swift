@@ -26,11 +26,12 @@ extension Scanner {
 #endif
 		}
 		
-		func offset(by offset: Int, in str: String) -> Location {
+		func offset(by offset: Int, _ offsetForObjC: Int? = nil, in str: String) -> Location {
 #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 			if #available(OSX 10.15, tvOS 13.0, iOS 13.0, watchOS 6.0, *) {
 				return Location(index: str.index(index, offsetBy: offset))
 			} else {
+				let offset = offsetForObjC ?? offset
 				let currentIndex = Range(NSRange(location: 0, length: obsolete), in: str)!.upperBound
 				let offsetIndex = str.index(currentIndex, offsetBy: offset)
 				return Location(obsolete: NSRange(str.startIndex..<offsetIndex, in: str).length)

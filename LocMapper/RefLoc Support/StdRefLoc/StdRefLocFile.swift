@@ -59,12 +59,13 @@ public class StdRefLocFile {
 					/* If we have successfully parsed rows in the tags cell, the cell content is invalid as the tags be on a single line: the header. */
 					throw error
 				}
+				let tags = tagsParser.fieldNames.filter{ !$0.isEmpty }
 				/* If the parser failed parsing the header, the value of fieldNames will be left at its current value, which is an empty array.
 				 * So if we have an empty fieldNames, but a non-empty tagsStr, we got an error parsing the tags. */
-				guard !tagsParser.fieldNames.isEmpty || tagsStr.isEmpty else {
+				guard !tags.isEmpty || tagsStr.isEmpty else {
 					throw error
 				}
-				taggedKey = TaggedString(value: keyStr, tags: tagsParser.fieldNames)
+				taggedKey = TaggedString(value: keyStr, tags: tags)
 			} else {
 				taggedKey = TaggedString(string: keyStr)
 			}

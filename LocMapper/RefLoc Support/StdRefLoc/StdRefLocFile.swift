@@ -20,6 +20,15 @@ import Logging
 
 public class StdRefLocFile {
 	
+	static let commonTagsMapping = [
+		"male_other": "gm",
+		"female_other": "gf",
+		"male_me": "g{₋}m",
+		"female_me": "g{₋}f",
+		"variable_string": "r",
+		"variable_number": "r##"
+	]
+	
 	typealias Key = String
 	typealias Value = [TaggedString]
 	public typealias Language = String
@@ -43,9 +52,26 @@ public class StdRefLocFile {
 		var entriesBuilding = [Key: [Language: Value]]()
 		for row in parsedRows {
 			guard let keyStr = row["KEY"], !keyStr.isEmpty else {continue}
-			let taggedKey = TaggedString(string: keyStr)
+			let taggedKey: TaggedString
+			if let tagsStr = row["LCM:TAGS"] {
+				let tagsParser = CSVParser(source: tagsStr, startOffset: tagsStr.startIndex, separator: ",", hasHeader: true, fieldNames: nil)
+				guard tagsParser.arrayOfParsedRows() == nil else {
+					/* If we have successfully parsed rows in the tags cell, the cell content is invalid as the tags be on a single line: the header. */
+					throw error
+				}
+				/* If the parser failed parsing the header, the value of fieldNames will be left at its current value, which is an empty array.
+				 * So if we have an empty fieldNames, but a non-empty tagsStr, we got an error parsing the tags. */
+				guard !tagsParser.fieldNames.isEmpty || tagsStr.isEmpty else {
+					throw error
+				}
+				taggedKey = TaggedString(value: keyStr, tags: tagsParser.fieldNames)
+			} else {
+				taggedKey = TaggedString(string: keyStr)
+			}
+			let tags = taggedKey.tags.map{ Self.commonTagsMapping[$0] ?? $0 }
+			
 			var values = entriesBuilding[taggedKey.value] ?? [:]
-			for language in sourceLanguages {values[language, default: []].append(TaggedString(value: row[language] ?? "", tags: taggedKey.tags))}
+			for language in sourceLanguages {values[language, default: []].append(TaggedString(value: row[language] ?? "", tags: tags))}
 			entriesBuilding[taggedKey.value] = values
 		}
 		languages = sourceLanguages
@@ -56,14 +82,6 @@ public class StdRefLocFile {
 		let decoder = JSONDecoder()
 		decoder.keyDecodingStrategy = .convertFromSnakeCase
 		let baseURL = URL(string: "https://api.lokalise.com/api2/")!
-		let tagMapping = [
-			"male_other": "gm",
-			"female_other": "gf",
-			"male_me": "g{₋}m",
-			"female_me": "g{₋}f",
-			"variable_string": "r",
-			"variable_number": "r##"
-		]
 		
 		if let p = logPrefix {print(p + "Downloading translations from Lokalise...")}
 		
@@ -122,7 +140,7 @@ public class StdRefLocFile {
 			let processedTags = tags.compactMap{ tag -> String? in
 				guard tag.hasPrefix("lcm:") else {return nil}
 				let tag = String(tag.dropFirst(4))
-				return tagMapping[tag] ?? tag
+				return Self.commonTagsMapping[tag] ?? tag
 			}
 			
 			/* Processing value from Lokalise. */

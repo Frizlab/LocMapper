@@ -56,19 +56,27 @@ extension LocFile {
 		}
 	}
 	
-	public func exportStdRefLoc(to path: String, csvSeparator: String) {
+	public func exportStdRefLoc(to path: String, useTagsColumn: Bool, csvSeparator: String) {
 		do {
 			var stream = try FileHandleOutputStream(forPath: path)
 			
 			/* Printing header. */
 			print("KEY".csvCellValueWithSeparator(csvSeparator), terminator: "", to: &stream)
+			if useTagsColumn {print(csvSeparator + "LCM:TAGS".csvCellValueWithSeparator(csvSeparator), terminator: "", to: &stream)}
 			for l in languages {print(csvSeparator + l.csvCellValueWithSeparator(csvSeparator), terminator: "", to: &stream)}
 			print("", to: &stream)
 			
 			/* Printing values. */
 			for k in entryKeys.sorted() {
 				guard k.env == "StdRefLoc" else {continue}
-				print(k.locKey.csvCellValueWithSeparator(csvSeparator), terminator: "", to: &stream)
+				if useTagsColumn {
+					let taggedKey = TaggedString(string: k.locKey)
+					print(taggedKey.value.csvCellValueWithSeparator(csvSeparator), terminator: "", to: &stream)
+					let tagsStr = taggedKey.tags.map{ $0.csvCellValueWithSeparator(",") }.joined(separator: ",")
+					print(csvSeparator + tagsStr.csvCellValueWithSeparator(csvSeparator), terminator: "", to: &stream)
+				} else {
+					print(k.locKey.csvCellValueWithSeparator(csvSeparator), terminator: "", to: &stream)
+				}
 				for l in languages {print(csvSeparator + (exportedValueForKey(k, withLanguage: l) ?? "---").csvCellValueWithSeparator(csvSeparator), terminator: "", to: &stream)}
 				print("", to: &stream)
 			}

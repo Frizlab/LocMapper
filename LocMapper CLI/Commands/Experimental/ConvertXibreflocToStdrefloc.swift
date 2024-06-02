@@ -60,7 +60,7 @@ struct ConvertXibreflocToStdrefloc : ParsableCommand {
 		locFile.mergeRefLocsWithStdRefLocFile(s, mergeStyle: .add)
 		
 		print("   Exporting Loc File to Std Ref Loc...")
-		locFile.exportStdRefLoc(to: outputFile, csvSeparator: csvSeparator)
+		locFile.exportStdRefLoc(to: outputFile, useTagsColumn: true, csvSeparator: csvSeparator)
 		print("Done")
 	}
 	

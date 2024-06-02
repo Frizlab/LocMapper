@@ -43,7 +43,7 @@ func dictionaryOptionFromArray(_ array: [String], allowEmpty: Bool = false) thro
 	let keys = stride(from: array.startIndex, to: array.endIndex, by: 2).map{ array[$0] }
 	let values = stride(from: array.index(after: array.startIndex), to: array.endIndex, by: 2).map{ array[$0] }
 	guard (allowEmpty || !keys.isEmpty) && keys.count == values.count else {
-		throw ValidationError("The array argument must not be empty and contain an even number of elements (alternance of keys and values)")
+		throw ValidationError("The array argument must \(!allowEmpty ? "not be empty and " : "")contain an even number of elements (alternance of keys and values)")
 	}
 	return Dictionary(zip(keys, values), uniquingKeysWith: { _, new in new })
 }

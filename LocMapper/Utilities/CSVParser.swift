@@ -34,16 +34,16 @@ class CSVParser {
 	private var scanner: Scanner!
 	
 	/* fieldNames is ignored if hasHeader is true */
-	init(source str: String, startOffset offset: String.Index, separator sep: String, hasHeader header: Bool, fieldNames names: [String]?) {
-		assert(offset < str.endIndex)
+	init(source str: String, startOffset: String.Index, separator: String, hasHeader: Bool, fieldNames: [String]?) {
+		assert(startOffset < str.endIndex)
 		assert(
-			!sep.isEmpty && sep.range(of: "\"") == nil && sep.rangeOfCharacter(from: CSVParser.newLinesCharacterSet) == nil && sep.unicodeScalars.count == 1,
+			!separator.isEmpty && separator.range(of: "\"") == nil && separator.rangeOfCharacter(from: CSVParser.newLinesCharacterSet) == nil && separator.unicodeScalars.count == 1,
 			"CSV separator string must not be empty, must contain a single unicode scalar and must not contain the double quote character or newline characters."
 		)
 		
 		csvString = str
-		separator = sep
-		startOffset = .init(index: offset, in: str)
+		self.separator = separator
+		self.startOffset = .init(index: startOffset, in: str)
 		
 		var cs = CSVParser.newLinesCharacterSet
 		cs.insert(charactersIn: "\"")
@@ -52,9 +52,9 @@ class CSVParser {
 		
 		separatorIsSingleChar = (separator.count == 1)
 		
-		hasHeader = header
-		if let names = names {fieldNames = names}
-		else                 {fieldNames = [String]()}
+		self.hasHeader = hasHeader
+		if let fieldNames {self.fieldNames = fieldNames}
+		else              {self.fieldNames = []}
 	}
 	
 	func arrayOfParsedRows() -> [[String: String]]? {

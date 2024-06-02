@@ -35,7 +35,7 @@ class CSVParser {
 	
 	/* fieldNames is ignored if hasHeader is true */
 	init(source str: String, startOffset: String.Index, separator: String, hasHeader: Bool, fieldNames: [String]?) {
-		assert(startOffset < str.endIndex)
+		assert(startOffset <= str.endIndex)
 		assert(
 			!separator.isEmpty && separator.range(of: "\"") == nil && separator.rangeOfCharacter(from: CSVParser.newLinesCharacterSet) == nil && separator.unicodeScalars.count == 1,
 			"CSV separator string must not be empty, must contain a single unicode scalar and must not contain the double quote character or newline characters."

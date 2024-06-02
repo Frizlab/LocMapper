@@ -99,8 +99,7 @@
 		7BB9051224800C1C00E3F5F5 /* ExportToXcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9051124800C1C00E3F5F5 /* ExportToXcode.swift */; };
 		7BB90516248010C500E3F5F5 /* MergeAndroidLocs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB90515248010C500E3F5F5 /* MergeAndroidLocs.swift */; };
 		7BB90518248013D500E3F5F5 /* ExportToAndroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB90517248013D500E3F5F5 /* ExportToAndroid.swift */; };
-		7BB9051A248017CE00E3F5F5 /* MergeLokaliseTradsAsXibrefloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB90519248017CE00E3F5F5 /* MergeLokaliseTradsAsXibrefloc.swift */; };
-		7BB9051C24801E2600E3F5F5 /* MergeLokaliseTradsAsStdrefloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9051B24801E2600E3F5F5 /* MergeLokaliseTradsAsStdrefloc.swift */; };
+		7BB9051A248017CE00E3F5F5 /* MergeStdrefloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB90519248017CE00E3F5F5 /* MergeStdrefloc.swift */; };
 		7BB9051E2480203A00E3F5F5 /* Lint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9051D2480203A00E3F5F5 /* Lint.swift */; };
 		7BB90520248021B400E3F5F5 /* StandardizeRefloc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9051F248021B400E3F5F5 /* StandardizeRefloc.swift */; };
 		7BB905232480266100E3F5F5 /* Experimental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB905222480266100E3F5F5 /* Experimental.swift */; };
@@ -259,8 +258,7 @@
 		7BB9051124800C1C00E3F5F5 /* ExportToXcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportToXcode.swift; sourceTree = "<group>"; };
 		7BB90515248010C500E3F5F5 /* MergeAndroidLocs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeAndroidLocs.swift; sourceTree = "<group>"; };
 		7BB90517248013D500E3F5F5 /* ExportToAndroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportToAndroid.swift; sourceTree = "<group>"; };
-		7BB90519248017CE00E3F5F5 /* MergeLokaliseTradsAsXibrefloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeLokaliseTradsAsXibrefloc.swift; sourceTree = "<group>"; };
-		7BB9051B24801E2600E3F5F5 /* MergeLokaliseTradsAsStdrefloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeLokaliseTradsAsStdrefloc.swift; sourceTree = "<group>"; };
+		7BB90519248017CE00E3F5F5 /* MergeStdrefloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeStdrefloc.swift; sourceTree = "<group>"; };
 		7BB9051D2480203A00E3F5F5 /* Lint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lint.swift; sourceTree = "<group>"; };
 		7BB9051F248021B400E3F5F5 /* StandardizeRefloc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardizeRefloc.swift; sourceTree = "<group>"; };
 		7BB905222480266100E3F5F5 /* Experimental.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Experimental.swift; sourceTree = "<group>"; };
@@ -688,8 +686,7 @@
 				7BB9051124800C1C00E3F5F5 /* ExportToXcode.swift */,
 				7BB90515248010C500E3F5F5 /* MergeAndroidLocs.swift */,
 				7BB90517248013D500E3F5F5 /* ExportToAndroid.swift */,
-				7BB90519248017CE00E3F5F5 /* MergeLokaliseTradsAsXibrefloc.swift */,
-				7BB9051B24801E2600E3F5F5 /* MergeLokaliseTradsAsStdrefloc.swift */,
+				7BB90519248017CE00E3F5F5 /* MergeStdrefloc.swift */,
 				7BB9051D2480203A00E3F5F5 /* Lint.swift */,
 				7BB9051F248021B400E3F5F5 /* StandardizeRefloc.swift */,
 				7B20C7972480433600004824 /* UpdateXcodeStringsFromCode.swift */,
@@ -1046,8 +1043,7 @@
 				7BB9051E2480203A00E3F5F5 /* Lint.swift in Sources */,
 				7B6E25A319D4157A001934ED /* main.swift in Sources */,
 				7BB90516248010C500E3F5F5 /* MergeAndroidLocs.swift in Sources */,
-				7BB9051C24801E2600E3F5F5 /* MergeLokaliseTradsAsStdrefloc.swift in Sources */,
-				7BB9051A248017CE00E3F5F5 /* MergeLokaliseTradsAsXibrefloc.swift in Sources */,
+				7BB9051A248017CE00E3F5F5 /* MergeStdrefloc.swift in Sources */,
 				7B88B9DA247FE0DC00D48975 /* MergeXcodeLocs.swift in Sources */,
 				7B88B9D8247FDC2F00D48975 /* ObsoleteVerbs.swift in Sources */,
 				7B88B9DC247FE3FC00D48975 /* ParseUtils.swift in Sources */,
